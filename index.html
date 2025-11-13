@@ -32,13 +32,17 @@
             --hospital: #06b6d4;
             --day-bg: linear-gradient(135deg, #87CEEB, #98FB98);
             --night-bg: linear-gradient(135deg, #2c3e50, #34495e);
+            --spring-bg: linear-gradient(135deg, #87CEEB, #98FB98);
+            --summer-bg: linear-gradient(135deg, #FFD700, #FF8C00);
+            --autumn-bg: linear-gradient(135deg, #D2691E, #FFA500);
+            --winter-bg: linear-gradient(135deg, #B0C4DE, #4682B4);
         }
 
         html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: var(--day-bg);
+            background: var(--spring-bg);
             color: #1f2937;
             position: fixed;
             top: 0;
@@ -51,6 +55,18 @@
         body.night-mode {
             background: var(--night-bg);
             color: white;
+        }
+
+        body.summer-mode {
+            background: var(--summer-bg);
+        }
+
+        body.autumn-mode {
+            background: var(--autumn-bg);
+        }
+
+        body.winter-mode {
+            background: var(--winter-bg);
         }
 
         /* صفحه لاگین */
@@ -962,7 +978,7 @@
         }
 
         /* استایل‌های جدید برای اپ‌های جدید */
-        .library-app, .pharmacy-app, .realestate-app, .onlineshop-app, .internet-app, .lawyer-app, .municipality-app, .stock-app, .cooking-app, .supermarket-app, .friends-app, .training-app, .trade-app, .amusement-park-app, .cinema-app, .stadium-app {
+        .library-app, .pharmacy-app, .realestate-app, .onlineshop-app, .internet-app, .lawyer-app, .municipality-app, .stock-app, .cooking-app, .supermarket-app, .friends-app, .training-app, .trade-app, .amusement-park-app, .cinema-app, .stadium-app, .insurance-app, .home-app {
             display: none;
             height: 100%;
             overflow-y: auto;
@@ -1122,6 +1138,44 @@
             border-color: var(--neon);
         }
 
+        .insurance-policy {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .insurance-policy:hover {
+            border-color: var(--neon);
+        }
+
+        .home-feature {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .home-feature:hover {
+            border-color: var(--neon);
+            transform: translateY(-2px);
+        }
+
+        .home-feature.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .home-feature.disabled:hover {
+            transform: none;
+            border-color: transparent;
+        }
+
         /* ریسپانسیو برای تمام گوشی‌ها */
         @media (max-width: 480px) {
             .home-screen {
@@ -1187,14 +1241,8 @@
             <div class="school-name">مدرسه دکتر حسابی - نسخه نهایی</div>
             
             <div class="user-type">
-                <div class="user-type-btn active" onclick="setUserType('student', event)">
+                <div class="user-type-btn active">
                     دانش‌آموز
-                </div>
-                <div class="user-type-btn" onclick="setUserType('admin', event)">
-                    مدیر
-                </div>
-                <div class="user-type-btn" onclick="setUserType('creator', event)">
-                    سازنده
                 </div>
             </div>
 
@@ -1226,14 +1274,8 @@
                 <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
             </div>
 
-            <button class="btn" id="studentLogin" onclick="login()">
+            <button class="btn" onclick="login()">
                 <i class="fas fa-play"></i> شروع بازی
-            </button>
-            <button class="btn btn-admin" id="adminLogin" style="display: none;" onclick="adminLogin()">
-                <i class="fas fa-cogs"></i> ورود مدیریت
-            </button>
-            <button class="btn btn-creator" id="creatorLogin" style="display: none;" onclick="creatorLogin()">
-                <i class="fas fa-tools"></i> ورود سازنده
             </button>
         </div>
     </div>
@@ -1436,6 +1478,12 @@
                         </div>
                         <div class="app-name">ترید</div>
                     </div>
+                    <div class="app-icon" onclick="openApp('insurance')">
+                        <div style="background: linear-gradient(45deg, #06b6d4, #0891b2);">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="app-name">بیمه</div>
+                    </div>
                 </div>
 
                 <!-- نقشه شهر -->
@@ -1489,6 +1537,12 @@
                         <h3>🛒 مواد غذایی</h3>
                         <div class="items-grid" id="foodItemsList">
                             <!-- مواد غذایی -->
+                        </div>
+                    </div>
+                    <div class="backpack-section">
+                        <h3>💻 وسایل الکترونیکی</h3>
+                        <div class="items-grid" id="electronicsList">
+                            <!-- وسایل الکترونیکی -->
                         </div>
                     </div>
                 </div>
@@ -1601,6 +1655,12 @@
                         <h3>💼 فصل سوم: شغل</h3>
                         <p style="font-size: 0.8em;">§3.1: هر شغل نیازمندی خاص خود را دارد</p>
                         <p style="font-size: 0.8em;">§3.2: ارتقاء شغلی نیاز به تجربه دارد</p>
+                    </div>
+                    <div class="bank-section">
+                        <h3>📖 کتاب راهنمای کامل بازی</h3>
+                        <button class="btn" onclick="buyGameGuide()">
+                            خرید کتاب راهنما - 500 سکه
+                        </button>
                     </div>
                 </div>
 
@@ -1787,6 +1847,37 @@
                             <!-- دارایی‌ها -->
                         </div>
                     </div>
+                    <div class="bank-section">
+                        <h3>📈 گزارش سود و ضرر</h3>
+                        <div id="profitLossReport">
+                            <!-- گزارش -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- بیمه -->
+                <div class="insurance-app" id="insuranceApp">
+                    <h2 style="color: var(--neon); text-align: center; margin-bottom: 15px; font-size: 1.1em;">🛡️ شرکت بیمه</h2>
+                    <div class="bank-section">
+                        <h3>📋 بیمه‌های فعال</h3>
+                        <div id="activeInsurances">
+                            <!-- بیمه‌های فعال -->
+                        </div>
+                    </div>
+                    <div class="bank-section">
+                        <h3>💼 بیمه‌های قابل خرید</h3>
+                        <div id="insurancePolicies">
+                            <!-- بیمه‌ها -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- خانه -->
+                <div class="home-app" id="homeApp">
+                    <h2 style="color: var(--neon); text-align: center; margin-bottom: 15px; font-size: 1.1em;">🏠 خانه شما</h2>
+                    <div id="homeFeatures">
+                        <!-- امکانات خانه -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1835,6 +1926,23 @@
                 <div class="progress-fill" id="deliveryProgress" style="width: 0%"></div>
             </div>
             <div style="margin-top: 8px; color: #ccc; font-size: 0.9em;">زمان باقی‌مانده تا تحویل</div>
+            <button class="btn" onclick="closeDeliveryScreen()" style="margin-top: 15px; padding: 10px;">
+                بستن (تحویل در پس‌زمینه ادامه می‌یابد)
+            </button>
+        </div>
+
+        <!-- صفحه خواب -->
+        <div class="travel-screen" id="sleepScreen">
+            <div style="font-size: 3em; margin-bottom: 15px;">💤</div>
+            <div style="font-size: 1.3em; margin-bottom: 8px;">در حال خوابیدن...</div>
+            <div class="travel-timer" id="sleepTimer">08:00:00</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="sleepProgress" style="width: 0%"></div>
+            </div>
+            <div style="margin-top: 8px; color: #ccc; font-size: 0.9em;">صبح ساعت ۷ بیدار می‌شوید</div>
+            <button class="btn btn-danger" onclick="cancelSleep()" style="margin-top: 15px; padding: 10px;">
+                <i class="fas fa-times"></i> بیدار شدن
+            </button>
         </div>
 
         <!-- نوار پایین -->
@@ -1877,6 +1985,11 @@
             internetExpiry: null,
             internetDataLeft: 0,
             gameSpeed: 60, // 1 دقیقه واقعی = 1 ساعت بازی
+            currentSeason: 'spring',
+            hasGameGuide: false,
+            activeInsurances: [],
+            randomEvents: [],
+            isSleeping: false,
             
             // مکان‌های شهر
             locations: [
@@ -2083,6 +2196,22 @@
                     distance: 6, 
                     type: 'education',
                     actions: ['آموزش تخصصی']
+                },
+                { 
+                    id: 'insuranceOffice', 
+                    name: 'دفتر بیمه', 
+                    icon: '🛡️', 
+                    distance: 5, 
+                    type: 'service',
+                    actions: ['خرید بیمه']
+                },
+                { 
+                    id: 'electronicsStore', 
+                    name: 'فروشگاه الکترونیک', 
+                    icon: '💻', 
+                    distance: 7, 
+                    type: 'market',
+                    actions: ['خرید وسایل الکترونیکی']
                 }
             ],
 
@@ -2333,22 +2462,109 @@
 
             // ملک‌ها
             properties: [
-                { id: 1, name: 'آپارتمان کوچک', price: 50000, type: 'apartment', bills: 500, space: 2 },
-                { id: 2, name: 'آپارتمان متوسط', price: 100000, type: 'apartment', bills: 800, space: 4 },
-                { id: 3, name: 'آپارتمان بزرگ', price: 200000, type: 'apartment', bills: 1200, space: 6 },
-                { id: 4, name: 'ویلا', price: 500000, type: 'villa', bills: 2000, space: 10 },
-                { id: 5, name: 'ساختمان تجاری', price: 1000000, type: 'commercial', bills: 5000, space: 20 },
-                { id: 6, name: 'زمین', price: 30000, type: 'land', bills: 200, space: 1 }
+                { 
+                    id: 1, 
+                    name: 'آپارتمان کوچک', 
+                    price: 50000, 
+                    type: 'apartment', 
+                    bills: 500, 
+                    space: 2,
+                    features: ['اتاق خواب', 'آشپزخانه', 'حمام']
+                },
+                { 
+                    id: 2, 
+                    name: 'آپارتمان متوسط', 
+                    price: 100000, 
+                    type: 'apartment', 
+                    bills: 800, 
+                    space: 4,
+                    features: ['اتاق خواب', 'آشپزخانه', 'حمام', 'اتاق مطالعه']
+                },
+                { 
+                    id: 3, 
+                    name: 'آپارتمان بزرگ', 
+                    price: 200000, 
+                    type: 'apartment', 
+                    bills: 1200, 
+                    space: 6,
+                    features: ['اتاق خواب', 'آشپزخانه', 'حمام', 'اتاق مطالعه', 'حیاط']
+                },
+                { 
+                    id: 4, 
+                    name: 'ویلا', 
+                    price: 500000, 
+                    type: 'villa', 
+                    bills: 2000, 
+                    space: 10,
+                    features: ['اتاق خواب', 'آشپزخانه', 'حمام', 'اتاق مطالعه', 'حیاط', 'گاراژ', 'انباری']
+                },
+                { 
+                    id: 5, 
+                    name: 'ساختمان تجاری', 
+                    price: 1000000, 
+                    type: 'commercial', 
+                    bills: 5000, 
+                    space: 20,
+                    features: ['دفتر کار', 'اتاق کنفرانس', 'آشپزخانه', 'سرویس بهداشتی']
+                }
             ],
 
             // محصولات فروشگاه آنلاین
             onlineProducts: [
-                { id: 1, name: 'لپ‌تاپ گیمینگ', price: 50000, category: 'electronics', deliveryTime: 4 },
-                { id: 2, name: 'گوشی هوشمند', price: 30000, category: 'electronics', deliveryTime: 3 },
-                { id: 3, name: 'کنسول بازی', price: 40000, category: 'electronics', deliveryTime: 5 },
-                { id: 4, name: 'تلویزیون هوشمند', price: 60000, category: 'electronics', deliveryTime: 6 },
-                { id: 5, name: 'دوچرخه ورزشی', price: 15000, category: 'sports', deliveryTime: 4 },
-                { id: 6, name: 'مبل راحتی', price: 25000, category: 'furniture', deliveryTime: 8 }
+                { 
+                    id: 1, 
+                    name: 'لپ‌تاپ گیمینگ', 
+                    price: 50000, 
+                    category: 'electronics', 
+                    deliveryTime: 4,
+                    features: ['دسترسی به دوره‌های آنلاین', 'افزایش سرعت یادگیری 20%'],
+                    usage: 'education'
+                },
+                { 
+                    id: 2, 
+                    name: 'گوشی هوشمند', 
+                    price: 30000, 
+                    category: 'electronics', 
+                    deliveryTime: 3,
+                    features: ['ارتباط بهتر با دوستان', 'دسترسی سریع‌تر به اپ‌ها'],
+                    usage: 'communication'
+                },
+                { 
+                    id: 3, 
+                    name: 'کنسول بازی', 
+                    price: 40000, 
+                    category: 'electronics', 
+                    deliveryTime: 5,
+                    features: ['سرگرمی و بازی', 'کاهش استرس'],
+                    usage: 'entertainment'
+                },
+                { 
+                    id: 4, 
+                    name: 'تلویزیون هوشمند', 
+                    price: 60000, 
+                    category: 'electronics', 
+                    deliveryTime: 6,
+                    features: ['تماشای فیلم و سریال', 'آموزش از طریق رسانه'],
+                    usage: 'entertainment'
+                },
+                { 
+                    id: 5, 
+                    name: 'دوچرخه ورزشی', 
+                    price: 15000, 
+                    category: 'sports', 
+                    deliveryTime: 4,
+                    features: ['افزایش سلامت', 'کاهش هزینه ورزش'],
+                    usage: 'health'
+                },
+                { 
+                    id: 6, 
+                    name: 'مبل راحتی', 
+                    price: 25000, 
+                    category: 'furniture', 
+                    deliveryTime: 8,
+                    features: ['افزایش راحتی در خانه', 'بازیابی انرژی سریع‌تر'],
+                    usage: 'comfort'
+                }
             ],
 
             // بسته‌های اینترنت
@@ -2409,10 +2625,77 @@
 
             // دوستان
             friends: [
-                { id: 1, name: 'علی محمدی', level: 15, online: true },
-                { id: 2, name: 'سارا احمدی', level: 22, online: false },
-                { id: 3, name: 'محمد رضایی', level: 18, online: true },
-                { id: 4, name: 'فاطمه کریمی', level: 25, online: true }
+                { id: 1, name: 'علی محمدی', level: 15, online: true, trustLevel: 80 },
+                { id: 2, name: 'سارا احمدی', level: 22, online: false, trustLevel: 60 },
+                { id: 3, name: 'محمد رضایی', level: 18, online: true, trustLevel: 90 },
+                { id: 4, name: 'فاطمه کریمی', level: 25, online: true, trustLevel: 70 }
+            ],
+
+            // بیمه‌ها
+            insurancePolicies: [
+                { id: 1, name: 'بیمه سلامت پایه', price: 500, coverage: 1000, type: 'health', duration: 30 },
+                { id: 2, name: 'بیمه سلامت پیشرفته', price: 1500, coverage: 5000, type: 'health', duration: 30 },
+                { id: 3, name: 'بیمه وسیله نقلیه', price: 2000, coverage: 10000, type: 'vehicle', duration: 30 },
+                { id: 4, name: 'بیمه مسکن', price: 3000, coverage: 50000, type: 'property', duration: 30 },
+                { id: 5, name: 'بیمه شغلی', price: 1000, coverage: 2000, type: 'job', duration: 30 }
+            ],
+
+            // امکانات خانه
+            homeFeatures: [
+                { id: 1, name: 'اتاق خواب', icon: '🛏️', action: 'sleep', energyRecovery: 100, healthRecovery: 100, timeRequired: 480, description: 'خواب کامل شبانه' },
+                { id: 2, name: 'حمام', icon: '🚿', action: 'shower', energyRecovery: 30, healthRecovery: 20, timeRequired: 20, description: 'استحمام و بازیابی انرژی' },
+                { id: 3, name: 'آشپزخانه', icon: '👨‍🍳', action: 'cook', energyRecovery: 10, healthRecovery: 0, timeRequired: 30, description: 'پخت غذا و کاهش گرسنگی' },
+                { id: 4, name: 'اتاق مطالعه', icon: '📚', action: 'study', energyRecovery: -10, healthRecovery: 0, timeRequired: 60, description: 'مطالعه و افزایش هوش' },
+                { id: 5, name: 'حیاط', icon: '🌳', action: 'garden', energyRecovery: 20, healthRecovery: 10, timeRequired: 45, description: 'باغبانی و کسب درآمد' },
+                { id: 6, name: 'گاراژ', icon: '🔧', action: 'repair', energyRecovery: -15, healthRecovery: 0, timeRequired: 40, description: 'تعمیر وسایل نقلیه' }
+            ],
+
+            // حوادث رندوم
+            randomEvents: [
+                { 
+                    id: 1, 
+                    name: 'تصادف رانندگی', 
+                    type: 'accident', 
+                    probability: 0.05, 
+                    effect: { health: -30, coins: -2000 },
+                    message: 'متأسفانه در یک تصادف رانندگی مجروح شدید!',
+                    insuranceCoverage: 'vehicle'
+                },
+                { 
+                    id: 2, 
+                    name: 'بیماری', 
+                    type: 'sickness', 
+                    probability: 0.08, 
+                    effect: { health: -40, energy: -20 },
+                    message: 'به بیماری مبتلا شدید! نیاز به استراحت دارید.',
+                    insuranceCoverage: 'health'
+                },
+                { 
+                    id: 3, 
+                    name: 'سرقت', 
+                    type: 'theft', 
+                    probability: 0.03, 
+                    effect: { coins: -5000 },
+                    message: 'منزل شما مورد سرقت قرار گرفت!',
+                    insuranceCoverage: 'property'
+                },
+                { 
+                    id: 4, 
+                    name: 'فرصت سرمایه‌گذاری', 
+                    type: 'opportunity', 
+                    probability: 0.06, 
+                    effect: { coins: 3000 },
+                    message: 'یک فرصت سرمایه‌گذاری عالی پیدا کردید!'
+                },
+                { 
+                    id: 5, 
+                    name: 'حوادث طبیعی', 
+                    type: 'disaster', 
+                    probability: 0.02, 
+                    effect: { health: -20, coins: -3000 },
+                    message: 'یک حادثه طبیعی باعث خسارت شده است!',
+                    insuranceCoverage: 'property'
+                }
             ],
 
             // چت کلاسی
@@ -2475,6 +2758,88 @@
 
             // بروزرسانی وضعیت اینترنت
             updateInternetStatus();
+
+            // بررسی حوادث رندوم
+            checkRandomEvents();
+
+            // بروزرسانی فصل
+            updateSeason();
+        }
+
+        function updateSeason() {
+            const dayOfYear = Math.floor(gameData.gameTime / 24) % 365;
+            let newSeason = 'spring';
+            
+            if (dayOfYear < 90) newSeason = 'spring';
+            else if (dayOfYear < 180) newSeason = 'summer';
+            else if (dayOfYear < 270) newSeason = 'autumn';
+            else newSeason = 'winter';
+            
+            if (gameData.currentSeason !== newSeason) {
+                gameData.currentSeason = newSeason;
+                document.body.classList.remove('spring-mode', 'summer-mode', 'autumn-mode', 'winter-mode');
+                document.body.classList.add(newSeason + '-mode');
+                
+                showNotification(`فصل ${getSeasonName(newSeason)} شروع شد!`, 'info');
+            }
+        }
+
+        function getSeasonName(season) {
+            const names = {
+                'spring': 'بهار',
+                'summer': 'تابستان',
+                'autumn': 'پاییز',
+                'winter': 'زمستان'
+            };
+            return names[season];
+        }
+
+        function checkRandomEvents() {
+            if (!gameData.currentUser || gameData.isSleeping) return;
+            
+            gameData.randomEvents.forEach(event => {
+                if (Math.random() < event.probability) {
+                    handleRandomEvent(event);
+                }
+            });
+        }
+
+        function handleRandomEvent(event) {
+            // اعمال اثرات حادثه
+            if (event.effect.health) {
+                gameData.currentUser.health = Math.max(0, gameData.currentUser.health + event.effect.health);
+            }
+            if (event.effect.energy) {
+                gameData.currentUser.energy = Math.max(0, gameData.currentUser.energy + event.effect.energy);
+            }
+            if (event.effect.coins) {
+                gameData.currentUser.coins = Math.max(0, gameData.currentUser.coins + event.effect.coins);
+            }
+            
+            // بررسی بیمه
+            if (event.insuranceCoverage) {
+                const insurance = gameData.activeInsurances.find(ins => ins.type === event.insuranceCoverage);
+                if (insurance) {
+                    const coverageAmount = Math.abs(event.effect.coins || 0);
+                    if (coverageAmount > 0) {
+                        gameData.currentUser.coins += coverageAmount;
+                        showNotification(`بیمه ${getInsuranceTypeName(event.insuranceCoverage)} خسارت را پرداخت کرد!`, 'success');
+                    }
+                }
+            }
+            
+            showNotification(event.message, event.effect.coins > 0 ? 'success' : 'error');
+            updateUserInfo();
+        }
+
+        function getInsuranceTypeName(type) {
+            const names = {
+                'health': 'سلامت',
+                'vehicle': 'وسیله نقلیه',
+                'property': 'مسکن',
+                'job': 'شغلی'
+            };
+            return names[type] || type;
         }
 
         function handleNewDay() {
@@ -2500,6 +2865,9 @@
 
             // تولید قبض‌ها
             generateBills();
+            
+            // تمدید بیمه
+            updateInsurance();
             
             showNotification('💰 حقوق روزانه 500 سکه دریافت شد!', 'success');
         }
@@ -2546,6 +2914,13 @@
                     property: 'سرویس اینترنت'
                 });
             }
+        }
+
+        function updateInsurance() {
+            gameData.activeInsurances = gameData.activeInsurances.filter(insurance => {
+                insurance.daysLeft--;
+                return insurance.daysLeft > 0;
+            });
         }
 
         // ==================== سیستم اینترنت ====================
@@ -2654,29 +3029,6 @@
         }
 
         // ==================== سیستم لاگین ====================
-        function setUserType(type, event) {
-            document.querySelectorAll('.user-type-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            const studentBtn = document.getElementById('studentLogin');
-            const adminBtn = document.getElementById('adminLogin');
-            const creatorBtn = document.getElementById('creatorLogin');
-            
-            studentBtn.style.display = 'none';
-            adminBtn.style.display = 'none';
-            creatorBtn.style.display = 'none';
-            
-            if (type === 'student') {
-                studentBtn.style.display = 'block';
-            } else if (type === 'admin') {
-                adminBtn.style.display = 'block';
-            } else if (type === 'creator') {
-                creatorBtn.style.display = 'block';
-            }
-        }
-
         function login() {
             const className = document.getElementById('className').value;
             const firstName = document.getElementById('firstName').value;
@@ -2705,6 +3057,7 @@
                 books: [],
                 medicines: [],
                 foodItems: [],
+                electronics: [],
                 backpack: [],
                 bankBalance: 2000,
                 transactions: [],
@@ -2728,57 +3081,6 @@
             showGamePage();
             startGameLoop();
             showNotification(`🎉 به شهر دکتر حسابی خوش آمدید ${firstName}!`, 'success');
-        }
-
-        function adminLogin() {
-            const password = document.getElementById('password').value;
-            const className = document.getElementById('className').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            
-            if (password === 'hesabiland') {
-                gameData.currentUser = {
-                    id: 'admin',
-                    type: 'admin',
-                    firstName: firstName || 'مدیر',
-                    lastName: lastName || 'مدرسه',
-                    className: className || '701',
-                    coins: 0,
-                    energy: 100,
-                    hunger: 0,
-                    health: 100,
-                    intelligence: 100
-                };
-                
-                showGamePage();
-                showNotification('👑 به پنل مدیریت خوش آمدید', 'success');
-            } else {
-                showNotification('رمز عبور مدیریت اشتباه است', 'error');
-            }
-        }
-
-        function creatorLogin() {
-            const password = document.getElementById('password').value;
-            
-            if (password === 'hesabiland') {
-                gameData.currentUser = {
-                    id: 'creator',
-                    type: 'creator', 
-                    firstName: 'آراد',
-                    lastName: 'مقدم',
-                    className: '701',
-                    coins: 0,
-                    energy: 100,
-                    hunger: 0,
-                    health: 100,
-                    intelligence: 100
-                };
-                
-                showGamePage();
-                showNotification('🛠️ به پنل سازنده خوش آمدید', 'success');
-            } else {
-                showNotification('رمز عبور سازنده اشتباه است', 'error');
-            }
         }
 
         // ==================== نمایش بازی ====================
@@ -2812,6 +3114,11 @@
                 return;
             }
 
+            if (gameData.isSleeping) {
+                showNotification('💤 در حال حاضر در خواب هستید!', 'error');
+                return;
+            }
+
             // بررسی دسترسی اینترنت برای اپ‌ها
             if (appName !== 'internet' && appName !== '' && !checkInternetAccess()) {
                 return;
@@ -2822,7 +3129,8 @@
                 'chatApp', 'educationApp', 'lawApp', 'transportApp', 'repairShop',
                 'libraryApp', 'pharmacyApp', 'realestateApp', 'onlineshopApp', 
                 'internetApp', 'lawyerApp', 'municipalityApp', 'stockApp', 
-                'cookingApp', 'supermarketApp', 'friendsApp', 'trainingApp', 'tradeApp'
+                'cookingApp', 'supermarketApp', 'friendsApp', 'trainingApp', 'tradeApp',
+                'insuranceApp', 'homeApp'
             ];
             
             apps.forEach(app => {
@@ -2859,6 +3167,7 @@
                     break;
                 case 'laws':
                     document.getElementById('lawApp').style.display = 'block';
+                    loadLaws();
                     break;
                 case 'transport':
                     document.getElementById('transportApp').style.display = 'block';
@@ -2920,6 +3229,14 @@
                     document.getElementById('tradeApp').style.display = 'block';
                     loadTrade();
                     break;
+                case 'insurance':
+                    document.getElementById('insuranceApp').style.display = 'block';
+                    loadInsurance();
+                    break;
+                case 'home':
+                    document.getElementById('homeApp').style.display = 'block';
+                    loadHome();
+                    break;
                 default:
                     document.getElementById('homeScreen').style.display = 'grid';
             }
@@ -2954,6 +3271,11 @@
         function travelToLocation(location) {
             if (gameData.currentTravel) {
                 showNotification('در حال حاضر در حال سفر هستید!', 'error');
+                return;
+            }
+
+            if (gameData.isSleeping) {
+                showNotification('💤 در حال حاضر در خواب هستید!', 'error');
                 return;
             }
 
@@ -3201,6 +3523,20 @@
                 case 'آموزش تخصصی':
                     closeModal();
                     openApp('training');
+                    break;
+
+                case 'خرید بیمه':
+                    closeModal();
+                    openApp('insurance');
+                    break;
+
+                case 'خرید وسایل الکترونیکی':
+                    closeModal();
+                    // رفتن به فروشگاه الکترونیک
+                    const electronicsStore = gameData.locations.find(l => l.id === 'electronicsStore');
+                    if (electronicsStore) {
+                        showLocationActions(electronicsStore);
+                    }
                     break;
 
                 case 'تفریح':
@@ -3661,6 +3997,18 @@
                         <div class="item-icon">🍎</div>
                         <div style="color: white; font-size: 0.8em;">${food.name}</div>
                         <div class="item-details">گرسنگی -${food.hungerReduction}</div>
+                    </div>
+                `).join('');
+
+            // وسایل الکترونیکی
+            const electronicsList = document.getElementById('electronicsList');
+            electronicsList.innerHTML = gameData.currentUser.electronics.length === 0 ?
+                '<div style="grid-column: 1/-1; text-align: center; padding: 15px; color: #ccc; font-size: 0.8em;">وسیله الکترونیکی ندارید</div>' :
+                gameData.currentUser.electronics.map(electronic => `
+                    <div class="item-card">
+                        <div class="item-icon">💻</div>
+                        <div style="color: white; font-size: 0.8em;">${electronic.name}</div>
+                        <div class="item-details">${electronic.usage}</div>
                     </div>
                 `).join('');
         }
@@ -4262,6 +4610,9 @@
                                     <div style="color: #ccc; font-size: 0.75em;">
                                         قبوض ماهیانه: ${property.bills} سکه
                                     </div>
+                                    <div style="color: #ccc; font-size: 0.7em;">
+                                        امکانات: ${property.features.join('، ')}
+                                    </div>
                                     ${isOwned ? 
                                         `<div style="color: var(--neon); font-size: 0.7em; margin-top: 4px;">
                                             ✅ مال شما
@@ -4277,8 +4628,8 @@
                                      <button class="btn" onclick="buyProperty(${property.id})" style="padding: 6px 12px; font-size: 0.8em;">
                                         خرید
                                      </button>` :
-                                    `<button class="btn" onclick="sellProperty(${property.id})" style="padding: 6px 12px; font-size: 0.8em;">
-                                        فروش
+                                    `<button class="btn" onclick="goToHome()" style="padding: 6px 12px; font-size: 0.8em;">
+                                        رفتن به خانه
                                      </button>`
                                 }
                             </div>
@@ -4300,10 +4651,13 @@
                                     <div style="color: #ccc; font-size: 0.8em;">
                                         نوع: ${property.type} • قبوض: ${property.bills} سکه
                                     </div>
+                                    <div style="color: #ccc; font-size: 0.7em;">
+                                        امکانات: ${property.features.join('، ')}
+                                    </div>
                                 </div>
                             </div>
-                            <button class="btn" onclick="sellProperty(${property.id})" style="padding: 6px 12px; font-size: 0.8em;">
-                                فروش
+                            <button class="btn" onclick="goToHome()" style="padding: 6px 12px; font-size: 0.8em;">
+                                رفتن به خانه
                             </button>
                         </div>
                     </div>
@@ -4336,26 +4690,181 @@
             }
         }
 
-        function sellProperty(propertyId) {
-            const propertyIndex = gameData.currentUser.properties.findIndex(p => p.id === propertyId);
-            if (propertyIndex === -1) return;
+        function goToHome() {
+            if (gameData.currentUser.properties.length === 0) {
+                showNotification('شما ملکی ندارید!', 'error');
+                return;
+            }
             
-            const property = gameData.currentUser.properties[propertyIndex];
-            const sellPrice = Math.floor(property.price * 0.8); // 80% قیمت خرید
+            // رفتن به خانه
+            const userHome = gameData.currentUser.properties[0]; // اولین ملک کاربر
+            const homeLocation = gameData.locations.find(l => l.id === 'apartments');
             
-            gameData.currentUser.coins += sellPrice;
-            gameData.currentUser.properties.splice(propertyIndex, 1);
+            if (homeLocation) {
+                startTravel(homeLocation, 1, 'پیاده', null); // سفر سریع به خانه
+            }
+        }
+
+        // ==================== سیستم خانه ====================
+        function loadHome() {
+            const homeFeatures = document.getElementById('homeFeatures');
             
-            gameData.currentUser.transactions.push({
-                description: `فروش ${property.name}`,
-                amount: sellPrice,
-                time: new Date().toLocaleTimeString('fa-IR')
+            if (gameData.currentUser.properties.length === 0) {
+                homeFeatures.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #ccc;">
+                        <div style="font-size: 3em;">🏠</div>
+                        <p style="font-size: 0.9em; margin-top: 10px;">شما هنوز خانه ندارید!</p>
+                        <p style="font-size: 0.8em; margin-top: 5px;">برای خرید خانه به دفتر املاک مراجعه کنید</p>
+                        <button class="btn" onclick="openApp('realestate')" style="margin-top: 15px;">
+                            رفتن به دفتر املاک
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const userHome = gameData.currentUser.properties[0];
+            homeFeatures.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 2.5em;">🏠</div>
+                    <h3 style="color: var(--neon); margin: 10px 0;">${userHome.name}</h3>
+                    <div style="color: #ccc; font-size: 0.8em;">امکانات: ${userHome.features.join('، ')}</div>
+                </div>
+            `;
+            
+            // نمایش امکانات خانه
+            gameData.homeFeatures.forEach(feature => {
+                if (userHome.features.includes(feature.name)) {
+                    const featureElement = document.createElement('div');
+                    featureElement.className = 'home-feature';
+                    featureElement.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="font-size: 1.8em;">${feature.icon}</div>
+                                <div>
+                                    <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${feature.name}</h3>
+                                    <div style="color: #ccc; font-size: 0.8em;">
+                                        ${feature.description}
+                                    </div>
+                                    <div style="color: #ccc; font-size: 0.7em;">
+                                        انرژی: ${feature.energyRecovery >= 0 ? '+' : ''}${feature.energyRecovery}% 
+                                        • سلامت: ${feature.healthRecovery >= 0 ? '+' : ''}${feature.healthRecovery}%
+                                        • زمان: ${feature.timeRequired} دقیقه
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn" onclick="useHomeFeature('${feature.action}')" style="padding: 6px 12px; font-size: 0.8em;">
+                                استفاده
+                            </button>
+                        </div>
+                    `;
+                    homeFeatures.appendChild(featureElement);
+                }
             });
+        }
+
+        function useHomeFeature(action) {
+            const feature = gameData.homeFeatures.find(f => f.action === action);
+            if (!feature) return;
+            
+            switch(action) {
+                case 'sleep':
+                    startSleep();
+                    break;
+                case 'shower':
+                    // استحمام
+                    gameData.currentUser.energy = Math.min(100, gameData.currentUser.energy + feature.energyRecovery);
+                    gameData.currentUser.health = Math.min(100, gameData.currentUser.health + feature.healthRecovery);
+                    showNotification('🚿 استحمام کردید و انرژی و سلامت بازیابی شد', 'success');
+                    break;
+                case 'cook':
+                    // آشپزی
+                    openApp('cooking');
+                    break;
+                case 'study':
+                    // مطالعه
+                    gameData.currentUser.energy = Math.max(0, gameData.currentUser.energy + feature.energyRecovery);
+                    gameData.currentUser.intelligence = Math.min(100, gameData.currentUser.intelligence + 5);
+                    showNotification('📚 مطالعه کردید و هوش شما افزایش یافت', 'success');
+                    break;
+                case 'garden':
+                    // باغبانی
+                    gameData.currentUser.energy = Math.min(100, gameData.currentUser.energy + feature.energyRecovery);
+                    gameData.currentUser.health = Math.min(100, gameData.currentUser.health + feature.healthRecovery);
+                    const gardenIncome = Math.floor(Math.random() * 200) + 100;
+                    gameData.currentUser.coins += gardenIncome;
+                    showNotification(`🌳 باغبانی کردید و ${gardenIncome} سکه کسب کردید`, 'success');
+                    break;
+                case 'repair':
+                    // تعمیرگاه خانگی
+                    openApp('repair');
+                    break;
+            }
             
             saveGameData();
             updateUserInfo();
-            loadRealEstate();
-            showNotification(`🏠 ${property.name} به مبلغ ${sellPrice} سکه فروخته شد!`, 'success');
+        }
+
+        function startSleep() {
+            const currentHour = Math.floor(gameData.gameTime / 60);
+            
+            if (currentHour >= 6 && currentHour < 20) {
+                showNotification('💤 فقط می‌توانید در شب بخوابید (۸ شب تا ۶ صبح)', 'error');
+                return;
+            }
+            
+            gameData.isSleeping = true;
+            document.getElementById('sleepScreen').style.display = 'flex';
+            
+            const sleepTime = 480; // 8 ساعت خواب
+            let timeLeft = sleepTime;
+            
+            const sleepInterval = setInterval(() => {
+                if (!gameData.isSleeping) {
+                    clearInterval(sleepInterval);
+                    return;
+                }
+                
+                timeLeft--;
+                const progress = ((sleepTime - timeLeft) / sleepTime) * 100;
+                
+                const hours = Math.floor(timeLeft / 60);
+                const minutes = timeLeft % 60;
+                
+                document.getElementById('sleepTimer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                document.getElementById('sleepProgress').style.width = `${progress}%`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(sleepInterval);
+                    finishSleep();
+                }
+            }, 1000);
+        }
+
+        function finishSleep() {
+            gameData.isSleeping = false;
+            document.getElementById('sleepScreen').style.display = 'none';
+            
+            // اثرات خواب
+            gameData.currentUser.energy = 100;
+            gameData.currentUser.health = 100;
+            gameData.currentUser.hunger = Math.max(0, gameData.currentUser.hunger - 20);
+            gameData.currentUser.intelligence = Math.min(100, gameData.currentUser.intelligence + 5);
+            
+            // پیشرفت زمان بازی
+            gameData.gameTime = 7 * 60; // ساعت ۷ صبح
+            
+            showNotification('💤 خواب کامل داشتید! انرژی و سلامت کامل شدند', 'success');
+            saveGameData();
+            updateUserInfo();
+            updateGameTime();
+        }
+
+        function cancelSleep() {
+            gameData.isSleeping = false;
+            document.getElementById('sleepScreen').style.display = 'none';
+            showNotification('خواب شما قطع شد', 'warning');
         }
 
         // ==================== سیستم فروشگاه آنلاین ====================
@@ -4373,6 +4882,9 @@
                                 </div>
                                 <div style="color: #ccc; font-size: 0.75em;">
                                     زمان تحویل: ${product.deliveryTime} ساعت
+                                </div>
+                                <div style="color: #ccc; font-size: 0.7em;">
+                                    ${product.features.join(' • ')}
                                 </div>
                             </div>
                         </div>
@@ -4396,6 +4908,11 @@
                     amount: -product.price,
                     time: new Date().toLocaleTimeString('fa-IR')
                 });
+                
+                // اضافه کردن به وسایل الکترونیکی
+                if (product.category === 'electronics') {
+                    gameData.currentUser.electronics.push({...product});
+                }
                 
                 // شروع فرآیند تحویل
                 startDelivery(product);
@@ -4460,6 +4977,11 @@
             
             gameData.currentDelivery = null;
             saveGameData();
+        }
+
+        function closeDeliveryScreen() {
+            document.getElementById('deliveryScreen').style.display = 'none';
+            showNotification('تحویل در پس‌زمینه ادامه می‌یابد...', 'info');
         }
 
         // ==================== سیستم اینترنت ====================
@@ -4889,15 +5411,15 @@
                             <div>
                                 <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${friend.name}</h3>
                                 <div style="color: #ccc; font-size: 0.8em;">
-                                    سطح: ${friend.level}
+                                    سطح: ${friend.level} • اعتماد: ${friend.trustLevel}%
                                 </div>
                                 <div style="color: ${friend.online ? 'var(--neon)' : '#ccc'}; font-size: 0.7em;">
                                     ${friend.online ? '🟢 آنلاین' : '🔴 آفلاین'}
                                 </div>
                             </div>
                         </div>
-                        <button class="btn" onclick="chatWithFriend(${friend.id})" style="padding: 6px 12px; font-size: 0.8em;">
-                            چت
+                        <button class="btn" onclick="showFriendOptions(${friend.id})" style="padding: 6px 12px; font-size: 0.8em;">
+                            چه کاری ازم بر میاد؟
                         </button>
                     </div>
                 </div>
@@ -4922,24 +5444,254 @@
             showNotification(`👥 ${randomFriend.name} به لیست دوستان شما اضافه شد!`, 'success');
         }
 
-        function chatWithFriend(friendId) {
+        function showFriendOptions(friendId) {
             const friend = gameData.currentUser.friends.find(f => f.id === friendId);
             if (!friend) return;
             
-            showModal(`
-                <h3 style="color: var(--neon); text-align: center; margin-bottom: 12px; font-size: 1.1em;">💬 چت با ${friend.name}</h3>
-                <div style="color: #ccc; margin-bottom: 15px; font-size: 0.9em; text-align: center;">
-                    ${friend.online ? '🟢 آنلاین' : '🔴 آفلاین'}
+            const modalContent = `
+                <h3 style="color: var(--neon); text-align: center; margin-bottom: 12px; font-size: 1.1em;">👥 چه کاری ازم برای ${friend.name} بر میاد؟</h3>
+                
+                <div class="repair-option" onclick="lendMoneyToFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">قرض دادن پول</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">قرض دادن سکه به دوست</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">💰</div>
+                    </div>
                 </div>
-                <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; margin-bottom: 10px;">
-                    <div style="color: white; font-size: 0.9em;">سلام! چطور می‌توانم کمکتان کنم؟</div>
-                    <div style="color: #ccc; font-size: 0.7em; text-align: left; margin-top: 4px;">${friend.name}</div>
+                
+                <div class="repair-option" onclick="collectDebtFromFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">پس گرفتن پول</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">دریافت پول قرض داده شده</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">💵</div>
+                    </div>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" placeholder="پیام خود را بنویسید..." style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #333; background: rgba(255,255,255,0.1); color: white; font-size: 0.9em;">
-                    <button class="btn" style="padding: 8px 12px; font-size: 0.8em;">ارسال</button>
+                
+                <div class="repair-option" onclick="workWithFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">همکاری در کار</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">کار گروهی برای درآمد بیشتر</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">🤝</div>
+                    </div>
                 </div>
-            `);
+                
+                <div class="repair-option" onclick="giftToFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">هدیه دادن</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">هدیه دادن سکه یا کالا</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">🎁</div>
+                    </div>
+                </div>
+                
+                <div class="repair-option" onclick="tradeWithFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">معامله</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">تبادل کالا با دوست</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">🤝</div>
+                    </div>
+                </div>
+                
+                <div class="repair-option" onclick="competeWithFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">مسابقه</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">مسابقه در کار یا تحصیل</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">🏆</div>
+                    </div>
+                </div>
+                
+                <div class="repair-option" onclick="studyWithFriend(${friendId})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: white; font-size: 0.9em;">کمک درسی</strong>
+                            <div style="font-size: 0.75em; color: #ccc;">کمک به دوست در درس</div>
+                        </div>
+                        <div style="color: var(--warning); font-size: 1.1em;">📚</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-danger" onclick="closeModal()" style="margin-top: 12px; width: 100%; padding: 10px;">
+                    بستن
+                </button>
+            `;
+            
+            showModal(modalContent);
+        }
+
+        function lendMoneyToFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend) return;
+            
+            const amount = 1000; // مقدار ثابت برای سادگی
+            
+            if (gameData.currentUser.coins >= amount) {
+                gameData.currentUser.coins -= amount;
+                friend.trustLevel = Math.min(100, friend.trustLevel + 10);
+                
+                // ذخیره اطلاعات قرض
+                if (!friend.debts) friend.debts = [];
+                friend.debts.push({
+                    amount: amount,
+                    date: new Date().toLocaleDateString('fa-IR')
+                });
+                
+                gameData.currentUser.transactions.push({
+                    description: `قرض به ${friend.name}`,
+                    amount: -amount,
+                    time: new Date().toLocaleTimeString('fa-IR')
+                });
+                
+                closeModal();
+                saveGameData();
+                updateUserInfo();
+                showNotification(`💰 مبلغ ${amount} سکه به ${friend.name} قرض داده شد`, 'success');
+            } else {
+                showNotification('سکه کافی برای قرض دادن ندارید!', 'error');
+            }
+        }
+
+        function collectDebtFromFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend || !friend.debts || friend.debts.length === 0) {
+                showNotification('این دوست به شما بدهی ندارد!', 'warning');
+                return;
+            }
+            
+            const totalDebt = friend.debts.reduce((sum, debt) => sum + debt.amount, 0);
+            gameData.currentUser.coins += totalDebt;
+            friend.debts = [];
+            friend.trustLevel = Math.min(100, friend.trustLevel + 5);
+            
+            gameData.currentUser.transactions.push({
+                description: `دریافت قرض از ${friend.name}`,
+                amount: totalDebt,
+                time: new Date().toLocaleTimeString('fa-IR')
+            });
+            
+            closeModal();
+            saveGameData();
+            updateUserInfo();
+            showNotification(`💰 مبلغ ${totalDebt} سکه از ${friend.name} دریافت شد`, 'success');
+        }
+
+        function workWithFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend) return;
+            
+            const bonus = 500; // درآمد اضافی از کار گروهی
+            gameData.currentUser.coins += bonus;
+            friend.trustLevel = Math.min(100, friend.trustLevel + 8);
+            
+            gameData.currentUser.transactions.push({
+                description: `همکاری با ${friend.name}`,
+                amount: bonus,
+                time: new Date().toLocaleTimeString('fa-IR')
+            });
+            
+            closeModal();
+            saveGameData();
+            updateUserInfo();
+            showNotification(`🤝 با ${friend.name} همکاری کردید و ${bonus} سکه دریافت کردید`, 'success');
+        }
+
+        function giftToFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend) return;
+            
+            const giftAmount = 500;
+            
+            if (gameData.currentUser.coins >= giftAmount) {
+                gameData.currentUser.coins -= giftAmount;
+                friend.trustLevel = Math.min(100, friend.trustLevel + 15);
+                
+                gameData.currentUser.transactions.push({
+                    description: `هدیه به ${friend.name}`,
+                    amount: -giftAmount,
+                    time: new Date().toLocaleTimeString('fa-IR')
+                });
+                
+                closeModal();
+                saveGameData();
+                updateUserInfo();
+                showNotification(`🎁 به ${friend.name} هدیه دادید و اعتماد افزایش یافت`, 'success');
+            } else {
+                showNotification('سکه کافی برای هدیه دادن ندارید!', 'error');
+            }
+        }
+
+        function tradeWithFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend) return;
+            
+            // معامله ساده - تبادل تصادفی
+            const tradeBonus = Math.floor(Math.random() * 300) + 100;
+            gameData.currentUser.coins += tradeBonus;
+            friend.trustLevel = Math.min(100, friend.trustLevel + 5);
+            
+            gameData.currentUser.transactions.push({
+                description: `معامله با ${friend.name}`,
+                amount: tradeBonus,
+                time: new Date().toLocaleTimeString('fa-IR')
+            });
+            
+            closeModal();
+            saveGameData();
+            updateUserInfo();
+            showNotification(`🤝 با ${friend.name} معامله کردید و ${tradeBonus} سکه سود کردید`, 'success');
+        }
+
+        function competeWithFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend) return;
+            
+            // مسابقه - شانس 50-50 برای برنده شدن
+            const isWinner = Math.random() > 0.5;
+            const prize = 800;
+            
+            if (isWinner) {
+                gameData.currentUser.coins += prize;
+                friend.trustLevel = Math.max(0, friend.trustLevel - 5);
+                showNotification(`🏆 در مسابقه با ${friend.name} برنده شدید و ${prize} سکه دریافت کردید`, 'success');
+            } else {
+                gameData.currentUser.coins = Math.max(0, gameData.currentUser.coins - prize);
+                friend.trustLevel = Math.min(100, friend.trustLevel + 5);
+                showNotification(`🏆 در مسابقه با ${friend.name} باختید`, 'warning');
+            }
+            
+            gameData.currentUser.transactions.push({
+                description: `مسابقه با ${friend.name}`,
+                amount: isWinner ? prize : -prize,
+                time: new Date().toLocaleTimeString('fa-IR')
+            });
+            
+            closeModal();
+            saveGameData();
+            updateUserInfo();
+        }
+
+        function studyWithFriend(friendId) {
+            const friend = gameData.currentUser.friends.find(f => f.id === friendId);
+            if (!friend) return;
+            
+            // کمک درسی - افزایش هوش
+            gameData.currentUser.intelligence = Math.min(100, gameData.currentUser.intelligence + 8);
+            friend.trustLevel = Math.min(100, friend.trustLevel + 12);
+            
+            closeModal();
+            saveGameData();
+            updateUserInfo();
+            showNotification(`📚 به ${friend.name} کمک درسی کردید و هوش شما افزایش یافت`, 'success');
         }
 
         // ==================== سیستم آموزشگاه تخصصی ====================
@@ -5018,56 +5770,107 @@
         function loadTrade() {
             const tradeMarket = document.getElementById('tradeMarket');
             const userAssets = document.getElementById('userAssets');
+            const profitLossReport = document.getElementById('profitLossReport');
             
             // بازار ترید
-            tradeMarket.innerHTML = gameData.tradeItems.map(item => `
-                <div class="trade-item">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="font-size: 1.8em;">💎</div>
-                            <div>
-                                <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${item.name}</h3>
-                                <div style="color: #ccc; font-size: 0.8em;">
-                                    قیمت: ${item.price.toLocaleString()} سکه
-                                </div>
-                                <div style="color: #ccc; font-size: 0.75em;">
-                                    نوسان: ${(item.volatility * 100).toFixed(1)}%
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn" onclick="buyTradeItem(${item.id})" style="padding: 6px 12px; font-size: 0.8em;">
-                            خرید
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            
-            // دارایی‌های کاربر
-            if (gameData.currentUser.tradeAssets.length === 0) {
-                userAssets.innerHTML = '<div style="text-align: center; padding: 15px; color: #ccc; font-size: 0.8em;">دارایی تریدی ندارید</div>';
-            } else {
-                userAssets.innerHTML = gameData.currentUser.tradeAssets.map(asset => `
+            tradeMarket.innerHTML = gameData.tradeItems.map(item => {
+                const userAsset = gameData.currentUser.tradeAssets.find(a => a.id === item.id);
+                const profitLoss = userAsset ? ((item.price - userAsset.buyPrice) / userAsset.buyPrice * 100) : 0;
+                
+                return `
                     <div class="trade-item">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="font-size: 1.8em;">💎</div>
                                 <div>
-                                    <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${asset.name}</h3>
+                                    <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${item.name}</h3>
                                     <div style="color: #ccc; font-size: 0.8em;">
-                                        مقدار: ${asset.amount}
+                                        قیمت: ${item.price.toLocaleString()} سکه
                                     </div>
                                     <div style="color: #ccc; font-size: 0.75em;">
-                                        قیمت خرید: ${asset.buyPrice.toLocaleString()} سکه
+                                        نوسان: ${(item.volatility * 100).toFixed(1)}%
                                     </div>
+                                    ${userAsset ? 
+                                        `<div style="color: ${profitLoss >= 0 ? 'var(--neon)' : 'var(--danger)'}; font-size: 0.7em;">
+                                            ${profitLoss >= 0 ? '▲' : '▼'} ${Math.abs(profitLoss).toFixed(1)}%
+                                        </div>` : ''
+                                    }
                                 </div>
                             </div>
-                            <button class="btn" onclick="sellTradeItem(${asset.id})" style="padding: 6px 12px; font-size: 0.8em;">
-                                فروش
+                            <button class="btn" onclick="buyTradeItem(${item.id})" style="padding: 6px 12px; font-size: 0.8em;">
+                                خرید
                             </button>
                         </div>
                     </div>
-                `).join('');
+                `;
+            }).join('');
+            
+            // دارایی‌های کاربر
+            if (gameData.currentUser.tradeAssets.length === 0) {
+                userAssets.innerHTML = '<div style="text-align: center; padding: 15px; color: #ccc; font-size: 0.8em;">دارایی تریدی ندارید</div>';
+            } else {
+                userAssets.innerHTML = gameData.currentUser.tradeAssets.map(asset => {
+                    const currentItem = gameData.tradeItems.find(i => i.id === asset.id);
+                    const profitLoss = ((currentItem.price - asset.buyPrice) / asset.buyPrice * 100);
+                    const totalValue = currentItem.price * asset.amount;
+                    const totalCost = asset.buyPrice * asset.amount;
+                    const netProfit = totalValue - totalCost;
+                    
+                    return `
+                        <div class="trade-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-size: 1.8em;">💎</div>
+                                    <div>
+                                        <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${asset.name}</h3>
+                                        <div style="color: #ccc; font-size: 0.8em;">
+                                            مقدار: ${asset.amount}
+                                        </div>
+                                        <div style="color: #ccc; font-size: 0.75em;">
+                                            قیمت خرید: ${asset.buyPrice.toLocaleString()} سکه
+                                        </div>
+                                        <div style="color: ${netProfit >= 0 ? 'var(--neon)' : 'var(--danger)'}; font-size: 0.7em;">
+                                            ${netProfit >= 0 ? 'سود' : 'ضرر'}: ${Math.abs(netProfit).toLocaleString()} سکه (${profitLoss >= 0 ? '+' : ''}${profitLoss.toFixed(1)}%)
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn" onclick="sellTradeItem(${asset.id})" style="padding: 6px 12px; font-size: 0.8em;">
+                                    فروش
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
+            
+            // گزارش سود و ضرر
+            let totalInvestment = 0;
+            let totalCurrentValue = 0;
+            
+            gameData.currentUser.tradeAssets.forEach(asset => {
+                const currentItem = gameData.tradeItems.find(i => i.id === asset.id);
+                totalInvestment += asset.buyPrice * asset.amount;
+                totalCurrentValue += currentItem.price * asset.amount;
+            });
+            
+            const totalProfitLoss = totalCurrentValue - totalInvestment;
+            const totalProfitLossPercent = totalInvestment > 0 ? (totalProfitLoss / totalInvestment * 100) : 0;
+            
+            profitLossReport.innerHTML = `
+                <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #ccc; font-size: 0.8em;">سرمایه‌گذاری کل</div>
+                    <div style="color: white; font-size: 1.1em; margin: 5px 0;">${totalInvestment.toLocaleString()} سکه</div>
+                    
+                    <div style="color: #ccc; font-size: 0.8em; margin-top: 8px;">ارزش فعلی</div>
+                    <div style="color: white; font-size: 1.1em; margin: 5px 0;">${totalCurrentValue.toLocaleString()} سکه</div>
+                    
+                    <div style="color: #ccc; font-size: 0.8em; margin-top: 8px;">سود/ضرر کل</div>
+                    <div style="color: ${totalProfitLoss >= 0 ? 'var(--neon)' : 'var(--danger)'}; font-size: 1.2em; margin: 5px 0;">
+                        ${totalProfitLoss >= 0 ? '+' : ''}${totalProfitLoss.toLocaleString()} سکه
+                        (${totalProfitLoss >= 0 ? '+' : ''}${totalProfitLossPercent.toFixed(1)}%)
+                    </div>
+                </div>
+            `;
         }
 
         function buyTradeItem(itemId) {
@@ -5084,7 +5887,8 @@
                 let userAsset = gameData.currentUser.tradeAssets.find(a => a.id === itemId);
                 if (userAsset) {
                     userAsset.amount += amount;
-                    userAsset.buyPrice = item.price; // آپدیت قیمت خرید
+                    // میانگین‌گیری قیمت خرید
+                    userAsset.buyPrice = (userAsset.buyPrice * (userAsset.amount - amount) + item.price * amount) / userAsset.amount;
                 } else {
                     gameData.currentUser.tradeAssets.push({
                         id: itemId,
@@ -5117,6 +5921,8 @@
             
             const userAsset = gameData.currentUser.tradeAssets[userAssetIndex];
             const totalValue = item.price * userAsset.amount;
+            const totalCost = userAsset.buyPrice * userAsset.amount;
+            const profit = totalValue - totalCost;
             
             gameData.currentUser.coins += totalValue;
             gameData.currentUser.tradeAssets.splice(userAssetIndex, 1);
@@ -5130,7 +5936,155 @@
             saveGameData();
             updateUserInfo();
             loadTrade();
-            showNotification(`💎 ${userAsset.amount} واحد از ${userAsset.name} فروخته شد!`, 'success');
+            
+            if (profit >= 0) {
+                showNotification(`💎 ${userAsset.amount} واحد از ${userAsset.name} فروخته شد! سود: ${profit.toLocaleString()} سکه`, 'success');
+            } else {
+                showNotification(`💎 ${userAsset.amount} واحد از ${userAsset.name} فروخته شد! ضرر: ${Math.abs(profit).toLocaleString()} سکه`, 'warning');
+            }
+        }
+
+        // ==================== سیستم بیمه ====================
+        function loadInsurance() {
+            const activeInsurances = document.getElementById('activeInsurances');
+            const insurancePolicies = document.getElementById('insurancePolicies');
+            
+            // بیمه‌های فعال
+            if (gameData.activeInsurances.length === 0) {
+                activeInsurances.innerHTML = '<div style="text-align: center; padding: 15px; color: #ccc; font-size: 0.8em;">بیمه فعالی ندارید</div>';
+            } else {
+                activeInsurances.innerHTML = gameData.activeInsurances.map(insurance => `
+                    <div class="insurance-policy">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="font-size: 1.8em;">🛡️</div>
+                                <div>
+                                    <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${insurance.name}</h3>
+                                    <div style="color: #ccc; font-size: 0.8em;">
+                                        پوشش: ${insurance.coverage.toLocaleString()} سکه
+                                    </div>
+                                    <div style="color: #ccc; font-size: 0.75em;">
+                                        روزهای باقی‌مانده: ${insurance.daysLeft} روز
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="color: var(--neon); font-weight: bold; font-size: 0.9em;">
+                                فعال
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // بیمه‌های قابل خرید
+            insurancePolicies.innerHTML = gameData.insurancePolicies.map(policy => {
+                const isActive = gameData.activeInsurances.some(ins => ins.type === policy.type);
+                
+                return `
+                    <div class="insurance-policy ${isActive ? 'active' : ''}" onclick="buyInsurance(${policy.id})">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="font-size: 1.8em;">🛡️</div>
+                                <div>
+                                    <h3 style="color: white; margin: 0 0 4px 0; font-size: 0.9em;">${policy.name}</h3>
+                                    <div style="color: #ccc; font-size: 0.8em;">
+                                        پوشش: ${policy.coverage.toLocaleString()} سکه
+                                    </div>
+                                    <div style="color: #ccc; font-size: 0.75em;">
+                                        مدت: ${policy.duration} روز • نوع: ${getInsuranceTypeName(policy.type)}
+                                    </div>
+                                    ${isActive ? 
+                                        `<div style="color: var(--neon); font-size: 0.7em; margin-top: 4px;">
+                                            ✅ فعال
+                                        </div>` : ''
+                                    }
+                                </div>
+                            </div>
+                            <div style="color: var(--warning); font-weight: bold; font-size: 1.1em;">
+                                ${policy.price} 🪙
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function buyInsurance(policyId) {
+            const policy = gameData.insurancePolicies.find(p => p.id === policyId);
+            if (!policy) return;
+            
+            // بررسی اینکه آیا همین نوع بیمه فعال است
+            const existingInsurance = gameData.activeInsurances.find(ins => ins.type === policy.type);
+            if (existingInsurance) {
+                showNotification(`شما از قبل بیمه ${getInsuranceTypeName(policy.type)} دارید!`, 'warning');
+                return;
+            }
+            
+            if (gameData.currentUser.coins >= policy.price) {
+                gameData.currentUser.coins -= policy.price;
+                
+                const newInsurance = {
+                    id: policy.id,
+                    name: policy.name,
+                    type: policy.type,
+                    coverage: policy.coverage,
+                    daysLeft: policy.duration,
+                    purchaseDate: new Date().toLocaleDateString('fa-IR')
+                };
+                
+                gameData.activeInsurances.push(newInsurance);
+                
+                gameData.currentUser.transactions.push({
+                    description: `خرید بیمه ${policy.name}`,
+                    amount: -policy.price,
+                    time: new Date().toLocaleTimeString('fa-IR')
+                });
+                
+                saveGameData();
+                updateUserInfo();
+                loadInsurance();
+                showNotification(`🛡️ بیمه ${policy.name} با موفقیت خریداری شد!`, 'success');
+            } else {
+                showNotification('سکه کافی برای خرید بیمه ندارید!', 'error');
+            }
+        }
+
+        // ==================== سیستم قوانین ====================
+        function loadLaws() {
+            // محتوای قوانین قبلاً در HTML موجود است
+        }
+
+        function buyGameGuide() {
+            if (gameData.hasGameGuide) {
+                showNotification('شما از قبل کتاب راهنما را دارید!', 'warning');
+                return;
+            }
+            
+            if (gameData.currentUser.coins >= 500) {
+                gameData.currentUser.coins -= 500;
+                gameData.hasGameGuide = true;
+                
+                gameData.currentUser.transactions.push({
+                    description: 'خرید کتاب راهنمای بازی',
+                    amount: -500,
+                    time: new Date().toLocaleTimeString('fa-IR')
+                });
+                
+                // اضافه کردن کتاب به کوله پشتی
+                gameData.currentUser.books.push({
+                    id: 999,
+                    name: 'کتاب راهنمای کامل بازی',
+                    intelligenceBoost: 15,
+                    studyTimeReduction: 20,
+                    type: 'guide'
+                });
+                
+                saveGameData();
+                updateUserInfo();
+                showNotification('📖 کتاب راهنمای بازی خریداری شد! هوش شما افزایش یافت', 'success');
+            } else {
+                showNotification('سکه کافی برای خرید کتاب راهنما ندارید!', 'error');
+            }
         }
 
         // ==================== ابزارهای کمکی ====================
@@ -5174,7 +6128,9 @@
             try {
                 const saved = localStorage.getItem('drHoseyniGame');
                 if (saved) {
-                    Object.assign(gameData, JSON.parse(saved));
+                    const parsedData = JSON.parse(saved);
+                    // حفظ توابع و متدهای موجود
+                    Object.assign(gameData, parsedData);
                 }
             } catch (e) {
                 console.error('خطا در بارگذاری بازی:', e);
@@ -5188,7 +6144,7 @@
 
         function startGameLoop() {
             setInterval(() => {
-                if (!gameData.currentUser || gameData.isInJail) return;
+                if (!gameData.currentUser || gameData.isInJail || gameData.isSleeping) return;
                 
                 // سیستم گرسنگی
                 gameData.currentUser.hunger += 1;
@@ -5257,6 +6213,10 @@
                 if (gameData.isInJail) {
                     document.getElementById('jailScreen').style.display = 'flex';
                 }
+                
+                if (gameData.isSleeping) {
+                    document.getElementById('sleepScreen').style.display = 'flex';
+                }
             }
         });
 
@@ -5272,4 +6232,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
