@@ -978,7 +978,7 @@
         }
 
         /* استایل‌های جدید برای اپ‌های جدید */
-        .library-app, .pharmacy-app, .realestate-app, .onlineshop-app, .internet-app, .lawyer-app, .municipality-app, .stock-app, .cooking-app, .supermarket-app, .friends-app, .training-app, .trade-app, .amusement-park-app, .cinema-app, .stadium-app, .insurance-app, .home-app {
+        .library-app, .pharmacy-app, .realestate-app, .onlineshop-app, .internet-app, .lawyer-app, .municipality-app, .stock-app, .cooking-app, .supermarket-app, .friends-app, .training-app, .trade-app, .amusement-park-app, .cinema-app, .stadium-app, .insurance-app, .home-app, .stats-app {
             display: none;
             height: 100%;
             overflow-y: auto;
@@ -1176,6 +1176,142 @@
             border-color: transparent;
         }
 
+        /* صفحه نمودار وضعیت */
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 15px;
+        }
+
+        .stat-chart {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .stat-title {
+            color: var(--neon);
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .chart-bar {
+            height: 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin: 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .chart-label {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+        }
+
+        .chart-value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .health-fill { background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981); }
+        .energy-fill { background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981); }
+        .hunger-fill { background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); }
+        .intelligence-fill { background: linear-gradient(90deg, #8b5cf6, #06b6d4, #10b981); }
+
+        .stat-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-box h4 {
+            color: var(--neon);
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .stat-box p {
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .game-over-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 4000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-over-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: var(--danger);
+        }
+
+        .game-over-reason {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .game-over-stats {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .game-over-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
         /* ریسپانسیو برای تمام گوشی‌ها */
         @media (max-width: 480px) {
             .home-screen {
@@ -1213,6 +1349,10 @@
             
             .status-bars {
                 min-width: 100px;
+            }
+
+            .stat-details {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1516,6 +1656,12 @@
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <div class="app-name">بیمه</div>
+                    </div>
+                    <div class="app-icon" onclick="openApp('stats')">
+                        <div style="background: linear-gradient(45deg, #ec4899, #db2777);">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="app-name">وضعیت</div>
                     </div>
                 </div>
 
@@ -1912,6 +2058,67 @@
                         <!-- امکانات خانه -->
                     </div>
                 </div>
+
+                <!-- نمودار وضعیت -->
+                <div class="stats-app" id="statsApp">
+                    <h2 style="color: var(--neon); text-align: center; margin-bottom: 15px; font-size: 1.1em;">📊 نمودار وضعیت</h2>
+                    <div class="stats-container">
+                        <div class="stat-chart">
+                            <h3 class="stat-title">سلامت</h3>
+                            <div class="chart-bar">
+                                <div class="chart-fill health-fill" id="healthChart" style="width: 100%"></div>
+                                <div class="chart-label">سلامت</div>
+                                <div class="chart-value" id="healthValue">100%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-chart">
+                            <h3 class="stat-title">انرژی</h3>
+                            <div class="chart-bar">
+                                <div class="chart-fill energy-fill" id="energyChart" style="width: 100%"></div>
+                                <div class="chart-label">انرژی</div>
+                                <div class="chart-value" id="energyValue">100%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-chart">
+                            <h3 class="stat-title">گرسنگی</h3>
+                            <div class="chart-bar">
+                                <div class="chart-fill hunger-fill" id="hungerChart" style="width: 0%"></div>
+                                <div class="chart-label">گرسنگی</div>
+                                <div class="chart-value" id="hungerValue">0%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-chart">
+                            <h3 class="stat-title">هوش</h3>
+                            <div class="chart-bar">
+                                <div class="chart-fill intelligence-fill" id="intelligenceChart" style="width: 0%"></div>
+                                <div class="chart-label">هوش</div>
+                                <div class="chart-value" id="intelligenceValue">0%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-details">
+                            <div class="stat-box">
+                                <h4>سکه‌ها</h4>
+                                <p id="statsCoins">2,000 🪙</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>ملک‌ها</h4>
+                                <p id="statsProperties">0</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>وسایل نقلیه</h4>
+                                <p id="statsVehicles">0</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>گواهینامه‌ها</h4>
+                                <p id="statsCertificates">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1978,6 +2185,20 @@
             </button>
         </div>
 
+        <!-- صفحه پایان بازی -->
+        <div class="game-over-screen" id="gameOverScreen">
+            <h1 class="game-over-title" id="gameOverTitle">پایان بازی</h1>
+            <div class="game-over-reason" id="gameOverReason">
+                بازی به پایان رسید!
+            </div>
+            <div class="game-over-stats" id="gameOverStats">
+                <!-- آمار بازی -->
+            </div>
+            <button class="btn btn-success" onclick="restartGame()" style="padding: 12px 24px; font-size: 1.1em;">
+                <i class="fas fa-redo"></i> شروع مجدد بازی
+            </button>
+        </div>
+
         <!-- نوار پایین -->
         <div class="bottom-nav">
             <div class="nav-btn active" onclick="showScreen('home')">
@@ -1999,6 +2220,10 @@
             <div class="nav-btn" onclick="openApp('backpack')">
                 <i class="fas fa-backpack"></i>
                 <span>کوله‌پشتی</span>
+            </div>
+            <div class="nav-btn" onclick="openApp('stats')">
+                <i class="fas fa-chart-pie"></i>
+                <span>وضعیت</span>
             </div>
         </div>
     </div>
@@ -2023,6 +2248,8 @@
             activeInsurances: [],
             randomEvents: [],
             isSleeping: false,
+            gameOver: false,
+            crimes: 0,
             
             // مکان‌های شهر
             locations: [
@@ -2683,14 +2910,14 @@
                 { id: 6, name: 'گاراژ', icon: '🔧', action: 'repair', energyRecovery: -15, healthRecovery: 0, timeRequired: 40, description: 'تعمیر وسایل نقلیه' }
             ],
 
-            // حوادث رندوم
+            // حوادث رندوم - کاهش احتمال وقوع
             randomEvents: [
                 { 
                     id: 1, 
                     name: 'تصادف رانندگی', 
                     type: 'accident', 
-                    probability: 0.05, 
-                    effect: { health: -30, coins: -2000 },
+                    probability: 0.001, 
+                    effect: { health: -30, coins: -1000 },
                     message: 'متأسفانه در یک تصادف رانندگی مجروح شدید!',
                     insuranceCoverage: 'vehicle'
                 },
@@ -2698,7 +2925,7 @@
                     id: 2, 
                     name: 'بیماری', 
                     type: 'sickness', 
-                    probability: 0.08, 
+                    probability: 0.005, 
                     effect: { health: -40, energy: -20 },
                     message: 'به بیماری مبتلا شدید! نیاز به استراحت دارید.',
                     insuranceCoverage: 'health'
@@ -2707,7 +2934,7 @@
                     id: 3, 
                     name: 'سرقت', 
                     type: 'theft', 
-                    probability: 0.03, 
+                    probability: 0.0008, 
                     effect: { coins: -5000 },
                     message: 'منزل شما مورد سرقت قرار گرفت!',
                     insuranceCoverage: 'property'
@@ -2716,7 +2943,7 @@
                     id: 4, 
                     name: 'فرصت سرمایه‌گذاری', 
                     type: 'opportunity', 
-                    probability: 0.06, 
+                    probability: 0.012, 
                     effect: { coins: 3000 },
                     message: 'یک فرصت سرمایه‌گذاری عالی پیدا کردید!'
                 },
@@ -2724,7 +2951,7 @@
                     id: 5, 
                     name: 'حوادث طبیعی', 
                     type: 'disaster', 
-                    probability: 0.02, 
+                    probability: 0.005, 
                     effect: { health: -20, coins: -3000 },
                     message: 'یک حادثه طبیعی باعث خسارت شده است!',
                     insuranceCoverage: 'property'
@@ -2768,6 +2995,8 @@
 
         // ==================== سیستم زمان ====================
         function updateGameTime() {
+            if (gameData.gameOver) return;
+            
             gameData.gameTime += 1;
             
             if (gameData.gameTime >= 24 * 60) {
@@ -2797,6 +3026,9 @@
 
             // بروزرسانی فصل
             updateSeason();
+            
+            // بررسی پایان بازی
+            checkGameOver();
         }
 
         function updateSeason() {
@@ -2828,7 +3060,7 @@
         }
 
         function checkRandomEvents() {
-            if (!gameData.currentUser || gameData.isSleeping) return;
+            if (!gameData.currentUser || gameData.isSleeping || gameData.gameOver) return;
             
             gameData.randomEvents.forEach(event => {
                 if (Math.random() < event.probability) {
@@ -2863,6 +3095,7 @@
             
             showNotification(event.message, event.effect.coins > 0 ? 'success' : 'error');
             updateUserInfo();
+            updateStats();
         }
 
         function getInsuranceTypeName(type) {
@@ -2876,13 +3109,14 @@
         }
 
         function handleNewDay() {
-            if (!gameData.currentUser) return;
+            if (!gameData.currentUser || gameData.gameOver) return;
             
             // بررسی وام‌ها
             gameData.currentUser.loans = gameData.currentUser.loans || [];
             gameData.currentUser.loans.forEach(loan => {
                 loan.daysLeft--;
                 if (loan.daysLeft <= 0) {
+                    gameData.crimes++;
                     sendToJail('عدم پرداخت وام');
                 }
             });
@@ -2906,7 +3140,7 @@
         }
 
         function generateBills() {
-            if (!gameData.currentUser || !gameData.currentUser.properties) return;
+            if (!gameData.currentUser || !gameData.currentUser.properties || gameData.gameOver) return;
             
             gameData.currentUser.bills = gameData.currentUser.bills || [];
             
@@ -2998,6 +3232,11 @@
             showNotification(`⛓️ به دلیل ${reason} به زندان افتادید!`, 'error');
             
             const jailInterval = setInterval(() => {
+                if (gameData.gameOver) {
+                    clearInterval(jailInterval);
+                    return;
+                }
+                
                 gameData.jailTimeLeft--;
                 
                 const hours = Math.floor(gameData.jailTimeLeft / 3600);
@@ -3021,7 +3260,7 @@
         }
 
         function startJailWork() {
-            if (!gameData.isInJail) return;
+            if (!gameData.isInJail || gameData.gameOver) return;
             
             const jailJob = gameData.jobs.find(job => job.id === 10);
             if (gameData.currentUser.energy >= jailJob.energyCost) {
@@ -3036,13 +3275,14 @@
                 
                 showNotification(`⛓️ مبلغ ${jailJob.salary} سکه از کار در زندان دریافت کردید`, 'success');
                 updateUserInfo();
+                updateStats();
             } else {
                 showNotification('انرژی کافی برای کار در زندان ندارید!', 'error');
             }
         }
 
         function hireLawyerFromJail() {
-            if (!gameData.isInJail) return;
+            if (!gameData.isInJail || gameData.gameOver) return;
             
             if (gameData.currentUser.coins >= 5000) {
                 gameData.currentUser.coins -= 5000;
@@ -3056,6 +3296,7 @@
                 
                 showNotification('⚖️ وکیل استخدام شد! زمان زندان شما 50% کاهش یافت', 'success');
                 updateUserInfo();
+                updateStats();
             } else {
                 showNotification('سکه کافی برای استخدام وکیل ندارید!', 'error');
             }
@@ -3121,6 +3362,7 @@
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('gamePage').style.display = 'block';
             updateUserInfo();
+            updateStats();
             loadCityMap();
             startTimeLoop();
         }
@@ -3142,6 +3384,11 @@
 
         // ==================== سیستم اپ‌ها ====================
         function openApp(appName) {
+            if (gameData.gameOver) {
+                showNotification('بازی به پایان رسیده است!', 'error');
+                return;
+            }
+
             if (gameData.isInJail && !['map', 'internet'].includes(appName)) {
                 showNotification('⛓️ در حال حاضر در زندان هستید!', 'error');
                 return;
@@ -3163,7 +3410,7 @@
                 'libraryApp', 'pharmacyApp', 'realestateApp', 'onlineshopApp', 
                 'internetApp', 'lawyerApp', 'municipalityApp', 'stockApp', 
                 'cookingApp', 'supermarketApp', 'friendsApp', 'trainingApp', 'tradeApp',
-                'insuranceApp', 'homeApp'
+                'insuranceApp', 'homeApp', 'statsApp'
             ];
             
             apps.forEach(app => {
@@ -3270,6 +3517,10 @@
                     document.getElementById('homeApp').style.display = 'block';
                     loadHome();
                     break;
+                case 'stats':
+                    document.getElementById('statsApp').style.display = 'block';
+                    updateStats();
+                    break;
                 default:
                     document.getElementById('homeScreen').style.display = 'grid';
             }
@@ -3357,9 +3608,10 @@
             // مصرف انرژی
             gameData.currentUser.energy -= 5;
             updateUserInfo();
+            updateStats();
 
             const travelInterval = setInterval(() => {
-                if (!gameData.currentTravel) {
+                if (!gameData.currentTravel || gameData.gameOver) {
                     clearInterval(travelInterval);
                     return;
                 }
@@ -3408,6 +3660,7 @@
             gameData.currentTravel = null;
             saveGameData();
             updateUserInfo();
+            updateStats();
         }
 
         function showLocationActions(location) {
@@ -3627,6 +3880,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
         }
 
         function cancelTravel() {
@@ -3721,6 +3975,7 @@
 
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadJobs();
         }
 
@@ -3761,6 +4016,7 @@
             showNotification(`💰 مبلغ ${job.salary} سکه بابت کار به عنوان ${job.name} دریافت کردید`, 'success');
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadJobs();
         }
 
@@ -3865,6 +4121,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadBank();
         }
 
@@ -3892,6 +4149,7 @@
             
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadBank();
         }
 
@@ -4109,6 +4367,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadTransport();
                 showNotification(`✅ خرید ${vehicle.name} با موفقیت انجام شد!`, 'success');
             } else {
@@ -4248,6 +4507,7 @@
             showNotification(`🎓 ${course.name} با موفقیت به پایان رسید! هوش شما افزایش یافت`, 'success');
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadEducation();
         }
 
@@ -4284,6 +4544,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadEducation();
                 showNotification(`🎓 ثبت نام در ${course.name} با موفقیت انجام شد!`, 'success');
             } else {
@@ -4371,6 +4632,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadRepairShop();
                 showNotification(`🔧 تعمیر ${vehicle.name} با موفقیت انجام شد!`, 'success');
             } else {
@@ -4494,6 +4756,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadMarket();
                 showNotification(`🛒 خرید ${ad.item} با موفقیت انجام شد!`, 'success');
             } else {
@@ -4546,6 +4809,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`📚 خرید ${book.name} با موفقیت انجام شد! هوش شما افزایش یافت`, 'success');
             } else {
                 showNotification('سکه کافی برای خرید کتاب ندارید!', 'error');
@@ -4615,6 +4879,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`💊 خرید ${medicine.name} با موفقیت انجام شد!`, 'success');
             } else {
                 showNotification('سکه کافی برای خرید دارو ندارید!', 'error');
@@ -4716,6 +4981,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadRealEstate();
                 showNotification(`🏠 خرید ${property.name} با موفقیت انجام شد!`, 'success');
             } else {
@@ -4836,6 +5102,7 @@
             
             saveGameData();
             updateUserInfo();
+            updateStats();
         }
 
         function startSleep() {
@@ -4853,7 +5120,7 @@
             let timeLeft = sleepTime;
             
             const sleepInterval = setInterval(() => {
-                if (!gameData.isSleeping) {
+                if (!gameData.isSleeping || gameData.gameOver) {
                     clearInterval(sleepInterval);
                     return;
                 }
@@ -4891,6 +5158,7 @@
             showNotification('💤 خواب کامل داشتید! انرژی و سلامت کامل شدند', 'success');
             saveGameData();
             updateUserInfo();
+            updateStats();
             updateGameTime();
         }
 
@@ -4952,6 +5220,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`🛒 خرید ${product.name} با موفقیت انجام شد! تحویل: ${product.deliveryTime} ساعت`, 'success');
             } else {
                 showNotification('سکه کافی برای خرید ندارید!', 'error');
@@ -4969,7 +5238,7 @@
             document.getElementById('deliveryItem').textContent = `در حال تحویل: ${product.name}`;
 
             const deliveryInterval = setInterval(() => {
-                if (!gameData.currentDelivery) {
+                if (!gameData.currentDelivery || gameData.gameOver) {
                     clearInterval(deliveryInterval);
                     return;
                 }
@@ -5094,6 +5363,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadInternet();
                 showNotification(`📡 بسته اینترنت ${pkg.name} با موفقیت فعال شد!`, 'success');
             } else {
@@ -5146,6 +5416,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
             } else {
                 showNotification('سکه کافی برای استفاده از خدمات وکیل ندارید!', 'error');
             }
@@ -5202,6 +5473,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadMunicipality();
                 showNotification(`✅ قبض ${bill.type} پرداخت شد!`, 'success');
             } else {
@@ -5279,6 +5551,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadStock();
                 showNotification(`📈 ${sharesToBuy} سهم از ${stock.name} خریداری شد!`, 'success');
             } else {
@@ -5306,6 +5579,7 @@
             
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadStock();
             showNotification(`📈 ${userStock.shares} سهم از ${stock.name} فروخته شد!`, 'success');
         }
@@ -5369,6 +5643,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`🍳 ${recipe.name} آماده شد! گرسنگی کاهش و انرژی افزایش یافت`, 'success');
             }, recipe.timeRequired * 1000);
         }
@@ -5415,6 +5690,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`🍎 خرید ${item.name} با موفقیت انجام شد!`, 'success');
             } else {
                 showNotification('سکه کافی برای خرید مواد غذایی ندارید!', 'error');
@@ -5588,6 +5864,7 @@
                 closeModal();
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`💰 مبلغ ${amount} سکه به ${friend.name} قرض داده شد`, 'success');
             } else {
                 showNotification('سکه کافی برای قرض دادن ندارید!', 'error');
@@ -5615,6 +5892,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
             showNotification(`💰 مبلغ ${totalDebt} سکه از ${friend.name} دریافت شد`, 'success');
         }
 
@@ -5635,6 +5913,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
             showNotification(`🤝 با ${friend.name} همکاری کردید و ${bonus} سکه دریافت کردید`, 'success');
         }
 
@@ -5657,6 +5936,7 @@
                 closeModal();
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification(`🎁 به ${friend.name} هدیه دادید و اعتماد افزایش یافت`, 'success');
             } else {
                 showNotification('سکه کافی برای هدیه دادن ندارید!', 'error');
@@ -5681,6 +5961,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
             showNotification(`🤝 با ${friend.name} معامله کردید و ${tradeBonus} سکه سود کردید`, 'success');
         }
 
@@ -5711,6 +5992,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
         }
 
         function studyWithFriend(friendId) {
@@ -5724,6 +6006,7 @@
             closeModal();
             saveGameData();
             updateUserInfo();
+            updateStats();
             showNotification(`📚 به ${friend.name} کمک درسی کردید و هوش شما افزایش یافت`, 'success');
         }
 
@@ -5939,6 +6222,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadTrade();
                 showNotification(`💎 ${amount} واحد از ${item.name} خریداری شد!`, 'success');
             } else {
@@ -5968,6 +6252,7 @@
             
             saveGameData();
             updateUserInfo();
+            updateStats();
             loadTrade();
             
             if (profit >= 0) {
@@ -6075,6 +6360,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 loadInsurance();
                 showNotification(`🛡️ بیمه ${policy.name} با موفقیت خریداری شد!`, 'success');
             } else {
@@ -6114,10 +6400,103 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
                 showNotification('📖 کتاب راهنمای بازی خریداری شد! هوش شما افزایش یافت', 'success');
             } else {
                 showNotification('سکه کافی برای خرید کتاب راهنما ندارید!', 'error');
             }
+        }
+
+        // ==================== سیستم نمودار وضعیت ====================
+        function updateStats() {
+            if (!gameData.currentUser) return;
+            
+            // آپدیت نمودارها
+            document.getElementById('healthChart').style.width = `${gameData.currentUser.health}%`;
+            document.getElementById('energyChart').style.width = `${gameData.currentUser.energy}%`;
+            document.getElementById('hungerChart').style.width = `${gameData.currentUser.hunger}%`;
+            document.getElementById('intelligenceChart').style.width = `${gameData.currentUser.intelligence}%`;
+            
+            // آپدیت مقادیر
+            document.getElementById('healthValue').textContent = `${gameData.currentUser.health}%`;
+            document.getElementById('energyValue').textContent = `${gameData.currentUser.energy}%`;
+            document.getElementById('hungerValue').textContent = `${gameData.currentUser.hunger}%`;
+            document.getElementById('intelligenceValue').textContent = `${gameData.currentUser.intelligence}%`;
+            
+            // آپدیت آمار
+            document.getElementById('statsCoins').textContent = `${gameData.currentUser.coins.toLocaleString()} 🪙`;
+            document.getElementById('statsProperties').textContent = gameData.currentUser.properties.length;
+            document.getElementById('statsVehicles').textContent = gameData.currentUser.vehicles.length;
+            document.getElementById('statsCertificates').textContent = gameData.currentUser.certificates.length;
+        }
+
+        // ==================== سیستم پایان بازی ====================
+        function checkGameOver() {
+            if (gameData.gameOver) return;
+            
+            // پایان اعدام
+            if (gameData.crimes >= 5) {
+                gameOver('اعدام', 'به دلیل ارتکاب جرایم متعدد، شما به اعدام محکوم شدید!');
+                return;
+            }
+            
+            // پایان ورشکستگی
+            if (gameData.currentUser.coins <= 0 && 
+                gameData.currentUser.properties.length === 0 && 
+                gameData.currentUser.vehicles.length === 0 &&
+                gameData.currentUser.electronics.length === 0 &&
+                !gameData.internetPackage) {
+                gameOver('ورشکستگی', 'تمام دارایی‌های خود را از دست داده‌اید و هیچ راهی برای کسب درآمد ندارید!');
+                return;
+            }
+            
+            // پایان تحصیلی
+            if (gameData.currentUser.certificates.some(c => c.name === 'کلاس چهارم') &&
+                gameData.currentUser.certificates.some(c => c.name === 'مدرک پزشکی')) {
+                gameOver('پایان تحصیلی', 'تبریک! شما با موفقیت تمام مراحل تحصیلی را به پایان رساندید و به یک پزشک متخصص تبدیل شدید!');
+                return;
+            }
+        }
+
+        function gameOver(title, reason) {
+            gameData.gameOver = true;
+            
+            document.getElementById('gameOverScreen').style.display = 'flex';
+            document.getElementById('gameOverTitle').textContent = title;
+            document.getElementById('gameOverReason').textContent = reason;
+            
+            // نمایش آمار نهایی
+            const stats = document.getElementById('gameOverStats');
+            stats.innerHTML = `
+                <div class="game-over-stat">
+                    <span>سکه‌های نهایی:</span>
+                    <span>${gameData.currentUser.coins.toLocaleString()} 🪙</span>
+                </div>
+                <div class="game-over-stat">
+                    <span>ملک‌ها:</span>
+                    <span>${gameData.currentUser.properties.length}</span>
+                </div>
+                <div class="game-over-stat">
+                    <span>وسایل نقلیه:</span>
+                    <span>${gameData.currentUser.vehicles.length}</span>
+                </div>
+                <div class="game-over-stat">
+                    <span>گواهینامه‌ها:</span>
+                    <span>${gameData.currentUser.certificates.length}</span>
+                </div>
+                <div class="game-over-stat">
+                    <span>جرایم:</span>
+                    <span>${gameData.crimes}</span>
+                </div>
+            `;
+        }
+
+        function restartGame() {
+            // پاک کردن داده‌های بازی
+            localStorage.removeItem('drHoseyniGame');
+            
+            // ریستارت بازی
+            location.reload();
         }
 
         // ==================== ابزارهای کمکی ====================
@@ -6177,7 +6556,7 @@
 
         function startGameLoop() {
             setInterval(() => {
-                if (!gameData.currentUser || gameData.isInJail || gameData.isSleeping) return;
+                if (!gameData.currentUser || gameData.isInJail || gameData.isSleeping || gameData.gameOver) return;
                 
                 // سیستم گرسنگی
                 gameData.currentUser.hunger += 1;
@@ -6210,6 +6589,7 @@
                         if (Math.random() < 0.01) { // 1% chance per minute
                             bill.dueDate--;
                             if (bill.dueDate <= -7) { // 7 روز معوقه
+                                gameData.crimes++;
                                 sendToJail('عدم پرداخت قبض');
                             }
                         }
@@ -6231,6 +6611,7 @@
                 
                 saveGameData();
                 updateUserInfo();
+                updateStats();
             }, 30000);
         }
 
@@ -6250,6 +6631,10 @@
                 if (gameData.isSleeping) {
                     document.getElementById('sleepScreen').style.display = 'flex';
                 }
+                
+                if (gameData.gameOver) {
+                    document.getElementById('gameOverScreen').style.display = 'flex';
+                }
             }
         });
 
@@ -6263,27 +6648,6 @@
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
         });
-    
-/* Burst events */
-function startEventBursts(){
-    if(gameData._eventBurstInterval) return;
-    gameData._eventBurstInterval=setInterval(()=>{
-        if(!gameData.currentUser||gameData.isSleeping||gameData.isInJail) return;
-        const burstCount=3+Math.floor(Math.random()*4);
-        for(let i=0;i<burstCount;i++){
-            setTimeout(()=>{
-                const evts=gameData.randomEvents;
-                const tw=evts.reduce((s,e)=>s+e.probability,0);
-                let r=Math.random()*tw, ch=evts[0];
-                for(const ev of evts){ if(r<ev.probability){ch=ev;break;} r-=ev.probability;}
-                handleRandomEvent(ch);
-            },i*800);
-        }
-    },600000);
-}
-// ensure call after game start
-setTimeout(()=>{ if(typeof startEventBursts==='function') startEventBursts(); },3000);
-
-</script>
+    </script>
 </body>
     </html>
